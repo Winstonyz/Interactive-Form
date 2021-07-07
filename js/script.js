@@ -1,4 +1,3 @@
-
 //Use the .focus() method on the <input type="text"> element for the "Name" field.
 //First, use querySelector to get the name element， using a tag bc name is an ID
 
@@ -134,20 +133,27 @@ form.addEventListener('submit', e => {
    //regex resource lookup: https://stackoverflow.com/questions/494035/how-do-you-use-a-variable-in-a-regular-expression
    //The "Name" field cannot be blank or empty.
    const nameReg = new RegExp(/^\s+$/);
+   const nameReg2 = new RegExp(/^(?![\s\S])/);
    const nameInput = document.querySelector(`#name`);
-   validity+=nameElementCheck(nameInput.value, emailReg);
+   validity+=nameElementCheck(nameInput.value, nameReg, nameReg2, nameInput);
 
 
    //The "Email Address" field must contain a validly formatted email address. The email address does not need to be a real email address, just formatted like one. 
    const emailReg= new RegExp(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/);
    const emailInput = document.querySelector(`#email`);
-   validity+=elementCheck(emailInput.value, emailReg);
+   validity+=elementCheck(emailInput.value, emailReg, emailInput);
 
    //The "Register for Activities" section must have at least one activity selected.
    if(checkedBoxes>0){
       validity+=0;
+      activitiesBoxes.parentElement.classList.add('valid');
+      activitiesBoxes.parentElement.classList.remove('not-valid');
+      activitiesBoxes.parentElement.lastElementChild.style.display = 'none';
    }else if(checkedBoxes<1){
       validity+=1;
+      activitiesBoxes.parentElement.classList.add('not-valid');
+      activitiesBoxes.parentElement.classList.remove('valid');
+      activitiesBoxes.parentElement.lastElementChild.style.display = 'block';
    }
 
    //If and only if credit card is the selected payment method:
@@ -155,32 +161,36 @@ form.addEventListener('submit', e => {
       //The "Card number" field must contain a 13 - 16 digit credit card number with no dashes or spaces. The value does not need to be a real credit card number.
       const cardnReg = new RegExp(/^\d{13,16}$/);
       const cardnInput = document.querySelector(`#cc-num`);
-      validity+=elementCheck(cardnInput.value, cardnReg);
+      validity+=elementCheck(cardnInput.value, cardnReg, cardnInput);
 
       //The "Zip code" field must contain a 5 digit number.
       const zipReg = new RegExp(/^\d{5}$/);
       const zipInput = document.querySelector(`#zip`);
-      validity+=elementCheck(zipInput.value, zipReg);
+      validity+=elementCheck(zipInput.value, zipReg, zipInput);
 
       //The "CVV" field must contain a 3 digit number.
       const cvvReg = new RegExp(/^\d{3}$/);
       const cvvInput = document.querySelector(`#cvv`);
-      validity+=elementCheck(cvvInput.value, cvvReg);
+      validity+=elementCheck(cvvInput.value, cvvReg, cvvInput);
    }
 
    //Only call `preventDefault` on the `event` object if one or more of the required fields is invalid.
    if (validity>0){
       //console.log("CANNOT SUBMIT!")
+      //console.log("Success!");
       e.preventDefault();
+   }else{
+      //debugging
+      console.log(validity);
    }
 
 
 })
 
 //A recommended approach is to create helper functions for each of the required fields to be validated.
-function elementCheck(element, regexInput){
+function elementCheck(elementValue, regexInput, element){
    //If a required form field or section is valid:
-   if(regexInput.test(String(element).toLowerCase())){
+   if(regexInput.test(String(elementValue).toLowerCase())){
       //Add the ‘.valid’ className to the parent element of the form field or section.
       element.parentElement.classList.add('valid');
       //Remove the ‘.not-valid’ className from the parent element of the form field or section.
@@ -209,9 +219,9 @@ function elementCheck(element, regexInput){
 
 //the regex I set here for name is the regex for white spaces and blank input, so the logic shall 
 //be reversed compared with the normal check function above
-function nameElementCheck(element, regexInput){
+function nameElementCheck(elementValue, regexInput, regexInputS, element){
    //If a required form field or section is valid:
-   if(!regexInput.test(String(element).toLowerCase())){
+   if(!regexInput.test(String(elementValue).toLowerCase()) && !regexInputS.test(String(elementValue).toLowerCase())){
       //Add the ‘.valid’ className to the parent element of the form field or section.
       element.parentElement.classList.add('valid');
       //Remove the ‘.not-valid’ className from the parent element of the form field or section.
@@ -260,4 +270,3 @@ checkBox.forEach( object => {
 });
 
 //Make the form validation errors obvious to all users.
-
