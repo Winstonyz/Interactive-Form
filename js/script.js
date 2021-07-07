@@ -1,6 +1,7 @@
 
 //Use the .focus() method on the <input type="text"> element for the "Name" field.
 //First, use querySelector to get the name element， using a tag bc name is an ID
+
 const nameTag = document.querySelector(`#name`);
 nameTag.focus();
 
