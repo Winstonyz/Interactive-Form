@@ -46,8 +46,10 @@ designOptions.addEventListener(`change`, e => {
       //compare each and only display the matching options
       if(e.target.value===colorOptions[i].getAttribute('data-theme')){
          colorOptions[i].hidden=false;
+         colorOptions[i].setAttribute(`selected`, ``);
       }else{
          colorOptions[i].hidden=true;
+         colorOptions[i].removeAttribute(`selected`);
       }
 
    }
