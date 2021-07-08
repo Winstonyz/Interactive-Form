@@ -129,6 +129,7 @@ const activitiesBoxes = document.querySelector('#activities-box');
 //Form validation
 //
 let validity=0;
+
 //Program the form element to listen for the submit event
 const form = document.querySelector(`form`);
 form.addEventListener('submit', e => {
@@ -181,6 +182,7 @@ form.addEventListener('submit', e => {
       //console.log("CANNOT SUBMIT!")
       //console.log("Success!");
       e.preventDefault();
+      validity=0;
    }else{
       //debugging
       console.log(validity);
@@ -233,6 +235,7 @@ function nameElementCheck(elementValue, regexInput, regexInputS, element){
       return 0;
    }else{//if a required form field or section is invalid
       //Add the ‘.not-valid’ className to the parent element of the form field or section. 
+      console.log(element.parentElement);
       element.parentElement.classList.add('not-valid');
       //For the activity section, the parent element would be the fieldset element for the activity section. 
       //For the other required inputs, the parent element would be a label element for the input.
